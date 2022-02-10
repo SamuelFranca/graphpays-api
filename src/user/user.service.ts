@@ -23,11 +23,8 @@ export class UserService {
 
   async findByEmail(email: string): Promise<User | undefined> {
     const res = await this.neo4jService.read(
-      `
-        MATCH (u:User {email:$email})
-        return u
-      `,
-      { email },
+      `MATCH (u:User {email:$email}) return u`,
+       { email },
     );
 
     return this.hydrate(res);

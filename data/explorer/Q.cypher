@@ -1,5 +1,6 @@
 //todo
 // Create constrains
+CREATE CONSTRAINT ON (u:User) ASSERT u.email IS UNIQUE;
 
 
 MATCH path0 = (Samuel:User {email: "samuelfranca2@gmail.com", password: "test2022", taxId: "100 000 001", country: "Portugal"})

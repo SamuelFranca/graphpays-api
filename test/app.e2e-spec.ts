@@ -55,12 +55,11 @@ describe('AppController (e2e)', () => {
           .send({
             email: 'hello@example.com',
             taxId: 13545666,
-            country: 'Portugal',
+            country: 'Portugal'
           })
           .expect(400)
           .expect((res) => {
             //console.log(res.body);
-
             expect(res.body.message).toContain('password should not be empty');
           });
       }); 
@@ -73,7 +72,7 @@ describe('AppController (e2e)', () => {
             email,
             password,
             taxId: 14587525,
-            country: 'Portugal',
+            country: 'Portugal'
           })
           .expect(201)
           .expect((res) => {
@@ -83,7 +82,7 @@ describe('AppController (e2e)', () => {
           });
       });
  
-      it('should return HTTP 400 when email is already taken', () => {
+       it('should return HTTP 400 when email is already taken', () => {
         return request(app.getHttpServer())
           .post('/auth/register')
           .set('Accept', 'application/json')
@@ -91,14 +90,14 @@ describe('AppController (e2e)', () => {
             email,
             password,
             taxId: 14587525,
-            country: 'Portugal',
+            country: 'Portugal'
           })
           .expect(400)
           .expect((res) => {
             console.log(res.body);
             expect(res.body.message).toContain('email already taken');
           });
-      }); 
+      });  
     });
 
      describe('POST /auth/login', () => {
@@ -128,6 +127,8 @@ describe('AppController (e2e)', () => {
       });
     }); 
  
+
+    
     describe('GET /auth/user', () => {
       it('should return unauthorised if no token is provided', () => {
         return request(app.getHttpServer()).get('/auth/user').expect(401);

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request, Get, UseInterceptors, UsePipes, ValidationPipe, Put, Delete, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, Get, UseInterceptors, UsePipes, ValidationPipe, Put, Delete, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserService } from '../user/user.service';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -21,20 +21,31 @@ export class AuthController {
     async postRegister(@Body() createUserDto: CreateUserDto, @Request() req) {
         const transaction: Transaction = req.transaction
 
-        const user = await this.userService.create(
-            transaction,
-            createUserDto.email,
-            createUserDto.password,
-            createUserDto.taxId,
-            createUserDto.country
-        )
+        //check if email exists
+        const existingUser = await this.userService.findByEmail(createUserDto.email);
 
-        const { access_token } = await this.authService.createToken(user)
+        if ( existingUser === undefined ) {
+            const user = await this.userService.create(
+                transaction,
+                createUserDto.email,
+                createUserDto.password,
+                createUserDto.taxId,
+                createUserDto.country
+            )
+    
+            const { access_token } = await this.authService.createToken(user)
+    
+            return {
+                ...user.toJson(),
+                access_token
+            }
 
-        return {
-            ...user.toJson(),
-            access_token
         }
+        else {
+            throw new BadRequestException()
+        }
+
+
     }
 
     @UseGuards(LocalAuthGuard)
