@@ -76,8 +76,8 @@ describe('AppController (e2e)', () => {
           })
           .expect(201)
           .expect((res) => {
-            console.log('result:');
-            console.log(res.body);
+            //console.log('result:');
+            //console.log(res.body);
             expect(res.body.access_token).toBeDefined();
           });
       });
@@ -94,7 +94,7 @@ describe('AppController (e2e)', () => {
           })
           .expect(400)
           .expect((res) => {
-            console.log(res.body);
+            //console.log(res.body);
             expect(res.body.message).toContain('email already taken');
           });
       });  
